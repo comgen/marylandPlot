@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gene Expression Plotter</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="https://cdn.jsdelivr.net/npm/regression"></script>
+  <style>
+    #suggestions {
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      background-color: white;
+      z-index: 1000;
+      width: calc(100% - 22px); /* Adjust width to match the input box */
+    }
+    .suggestion-item {
+      padding: 8px;
+      cursor: pointer;
+    }
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
+    #selected-genes {
+      margin-top: 10px;
+    }
+    .selected-gene {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px;
+      margin: 5px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+    }
+    .selected-gene .gene-name {
+      margin-right: 5px;
+    }
+    .selected-gene .remove-gene {
+      color: black;
+      font-size: 12px;
+    }
+    #gene-search {
+      background-color: #f5f5f5;
+    }
+    #geneChart {
+      border: 1px solid #000;
+    }
+    .suggestion-active {
+      background-color: #e0e0e0; /* Highlight color */
+    }
+  </style>
+</head>
+<body>
+  <h1>Gene Expression Plotter</h1>
+  <label for="gene-search">Select genes for plotting (maximum 5):</label>
+  <div style="position: relative;">
+    <input type="text" id="gene-search" placeholder="Enter gene name">
+    <div id="suggestions"></div>
+  </div>
+  
+  <div id="selected-genes">
+    <strong>Selected genes will appear here...</strong>
+  </div>
+  <br>
+  <canvas id="geneChart" width="500" height="300"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
