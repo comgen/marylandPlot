@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedGenes = [];
   const geneColors = {};
   const colorBlindFriendlyColors = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2'];
+  let availableColors = [...colorBlindFriendlyColors];
   let currentFocus = -1;
 
   fetch('data.json')
@@ -24,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function initializeGeneSearch() {
     geneSearch.addEventListener('focus', () => {
       if (selectedGenes.length >= maxGenes) {
-        geneSearch.blur();
+        geneSearch.disabled = true;
+        geneSearch.placeholder = 'Maximum reached...';
       } else {
         // Display the top of the list of genes
         suggestionsDiv.innerHTML = '';
@@ -51,11 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     geneSearch.addEventListener('input', (e) => {
       if (selectedGenes.length >= maxGenes) {
         geneSearch.value = '';
-        geneSearch.placeholder = 'Maximum reached';
+        geneSearch.placeholder = 'Maximum reached...';
+        geneSearch.disabled = true;
         e.preventDefault();
         return;
       } else {
-        geneSearch.placeholder = 'Enter gene name';
+        geneSearch.placeholder = 'Enter gene name...';
+        geneSearch.disabled = false;
       }
 
       const query = geneSearch.value.trim().toLowerCase();
@@ -111,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function selectGene(gene) {
+    console.log(`Selecting gene: ${gene}`);
     if (!selectedGenes.includes(gene)) {
       selectedGenes.push(gene);
       if (!geneColors[gene]) {
@@ -123,30 +128,39 @@ document.addEventListener('DOMContentLoaded', () => {
     suggestionsDiv.innerHTML = '';
     if (selectedGenes.length >= maxGenes) {
       geneSearch.placeholder = 'Maximum reached';
+      geneSearch.disabled = true;
     } else {
       geneSearch.placeholder = 'Enter gene name';
+      geneSearch.disabled = false;
     }
   }
 
   function updateSelectedGenes() {
+    console.log('Updating selected genes');
     selectedGenesDiv.innerHTML = '';
     selectedGenes.forEach(gene => {
       const div = document.createElement('div');
       div.classList.add('selected-gene');
       div.innerHTML = `<span class="gene-name">${gene}</span><span class="remove-gene">✖</span>`;
       div.querySelector('.remove-gene').addEventListener('click', () => {
+        console.log(`Removing gene: ${gene}`);
         selectedGenes = selectedGenes.filter(g => g !== gene);
+        availableColors.push(geneColors[gene]);
+        delete geneColors[gene];
         updateSelectedGenes();
         plotGenes();
         if (selectedGenes.length < maxGenes) {
           geneSearch.placeholder = 'Enter gene name';
+          geneSearch.disabled = false;
         }
+        geneSearch.disabled = false;
       });
       selectedGenesDiv.appendChild(div);
     });
   }
 
   function plotGenes() {
+    console.log('Plotting genes:', selectedGenes);
     const datasets = selectedGenes.map(gene => {
       const geneData = data.genes[gene].map((value, index) => ({ x: Number(data.individuals[index]), y: value }));
       
@@ -258,11 +272,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getUnusedColor() {
-    const usedColors = Object.values(geneColors);
-    for (const color of colorBlindFriendlyColors) {
-      if (!usedColors.includes(color)) {
-        return color;
-      }
+    if (availableColors.length > 0) {
+      return availableColors.shift();
     }
     // If all predefined colors are used, generate a random color
     return getRandomColor();

@@ -8,13 +8,13 @@
   <script src="https://cdn.jsdelivr.net/npm/regression"></script>
   <style>
     #suggestions {
-      border: 1px solid #ccc;
       max-height: 150px;
       overflow-y: auto;
       position: absolute;
       background-color: white;
       z-index: 1000;
-      width: calc(100% - 22px); /* Adjust width to match the input box */
+      width: 20%; /* Adjust width to match the input box */
+      box-sizing: border-box; /* Include padding and border in the element's total width and height */
     }
     .suggestion-item {
       padding: 8px;
@@ -59,7 +59,7 @@
   <h1>Gene Expression Plotter</h1>
   <label for="gene-search">Select genes for plotting (maximum 5):</label>
   <div style="position: relative;">
-    <input type="text" id="gene-search" placeholder="Enter gene name">
+    <input type="text" id="gene-search" placeholder="Enter gene name...">
     <div id="suggestions"></div>
   </div>
   
