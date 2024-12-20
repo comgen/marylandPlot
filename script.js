@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const maxGenes = 5;
   let geneChart;
 
+  const maxReachedPlaceholder = 'Maximum reached...';
+  const enterTextPlaceholder = 'Enter gene name...';
+
   let data = {};
   let selectedGenes = [];
   const geneColors = {};
@@ -26,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     geneSearch.addEventListener('focus', () => {
       if (selectedGenes.length >= maxGenes) {
         geneSearch.disabled = true;
-        geneSearch.placeholder = 'Maximum reached...';
+        geneSearch.placeholder = maxReachedPlaceholder;
       } else {
         // Display the top of the list of genes
         suggestionsDiv.innerHTML = '';
@@ -47,18 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
       // Close the suggestions dropdown
       setTimeout(() => {
         suggestionsDiv.innerHTML = '';
-      }, 100); // Delay to allow click event to register
+      }, 500); // Delay to allow click event to register
     });
 
     geneSearch.addEventListener('input', (e) => {
       if (selectedGenes.length >= maxGenes) {
         geneSearch.value = '';
-        geneSearch.placeholder = 'Maximum reached...';
+        geneSearch.placeholder = maxReachedPlaceholder;
         geneSearch.disabled = true;
         e.preventDefault();
         return;
       } else {
-        geneSearch.placeholder = 'Enter gene name...';
+        geneSearch.placeholder = enterTextPlaceholder;
         geneSearch.disabled = false;
       }
 
@@ -130,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
       geneSearch.placeholder = 'Maximum reached';
       geneSearch.disabled = true;
     } else {
-      geneSearch.placeholder = 'Enter gene name';
+      geneSearch.placeholder = enterTextPlaceholder;
       geneSearch.disabled = false;
     }
   }
@@ -150,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSelectedGenes();
         plotGenes();
         if (selectedGenes.length < maxGenes) {
-          geneSearch.placeholder = 'Enter gene name';
+          geneSearch.placeholder = enterTextPlaceholder;
           geneSearch.disabled = false;
         }
         geneSearch.disabled = false;
