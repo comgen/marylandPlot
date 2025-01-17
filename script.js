@@ -207,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       options: {
         responsive: false,
+        animation: false, // Disable animation
         scales: {
           x: {
             type: 'linear',
